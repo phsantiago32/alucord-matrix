@@ -1,6 +1,7 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
-
+import React from 'react';
 import appConfig from "../config.json"
+import { useRouter } from 'next/router';
 
 function Titulo(props) {
   console.log(props)
@@ -19,54 +20,12 @@ function Titulo(props) {
   )
 }
 
-function GlobalStyle() {
-  return (
-    <style global jsx>{`
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        list-style: none;
-      }
-      body {
-        font-family: 'Open Sans', sans-serif;
-      }
-      /* App fit Height */ 
-      html, body, #__next {
-        min-height: 100vh;
-        display: flex;
-        flex: 1;
-      }
-      #__next {
-        flex: 1;
-      }
-      #__next > * {
-        flex: 1;
-      }
-      /* ./App fit Height */ 
-    `}</style>
-  );
-}
-
-// function HomePage() {
-//   return (
-//     <div>
-//       <GlobalStyle/>
-//       <Titulo tag="h1" abacaxi="fruta">Seja bem vindo de volta!</Titulo>
-//       <h2>Discord - Alura Matrix</h2>
-//     </div>
-
-//   )
-// }
-
-// export default HomePage
-
 export default function PaginaInicial() {
-  const username = 'phsantiago32';
+  const [userName, setUsername] = React.useState('');
+  const router = useRouter();
 
   return (
     <>
-      <GlobalStyle />
       <Box
         styleSheet={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -92,6 +51,10 @@ export default function PaginaInicial() {
         >
           {/* Formulário */}
           <Box
+            onSubmit={function (event) {
+              event.preventDefault()
+              router.push('/chat')
+            }}
             as="form"
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
@@ -104,6 +67,10 @@ export default function PaginaInicial() {
             </Text>
 
             <TextField
+              onChange={function (event) {
+                const value = event.target.value
+                setUsername(value)
+              }}
               fullWidth
               textFieldColors={{
                 neutral: {
@@ -127,46 +94,51 @@ export default function PaginaInicial() {
             />
           </Box>
           {/* Formulário */}
-
-
           {/* Photo Area */}
-          <Box
-            styleSheet={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              maxWidth: '200px',
-              padding: '16px',
-              backgroundColor: appConfig.theme.colors.neutrals[800],
-              border: '1px solid',
-              borderColor: appConfig.theme.colors.neutrals[999],
-              borderRadius: '10px',
-              flex: 1,
-              minHeight: '240px',
-            }}
-          >
-            <Image
-              styleSheet={{
-                borderRadius: '50%',
-                marginBottom: '16px',
-              }}
-              src={`https://github.com/${username}.png`}
-            />
-            <Text
-              variant="body4"
-              styleSheet={{
-                color: appConfig.theme.colors.neutrals[200],
-                backgroundColor: appConfig.theme.colors.neutrals[900],
-                padding: '3px 10px',
-                borderRadius: '1000px'
-              }}
-            >
-              {username}
-            </Text>
-          </Box>
+          <UserAvatar userName={userName} />
           {/* Photo Area */}
         </Box>
       </Box>
     </>
   );
+}
+
+function UserAvatar(props) {
+  const userName = props.userName;
+  if (userName.length >= 2) {
+    return <Box
+      styleSheet={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        maxWidth: '200px',
+        padding: '16px',
+        backgroundColor: appConfig.theme.colors.neutrals[800],
+        border: '1px solid',
+        borderColor: appConfig.theme.colors.neutrals[999],
+        borderRadius: '10px',
+        flex: 1,
+        minHeight: '240px',
+      }}
+    >
+      <Image
+        styleSheet={{
+          borderRadius: '50%',
+          marginBottom: '16px',
+        }}
+        src={`https://github.com/${userName}.png`} />
+      <Text
+        variant="body4"
+        styleSheet={{
+          color: appConfig.theme.colors.neutrals[200],
+          backgroundColor: appConfig.theme.colors.neutrals[900],
+          padding: '3px 10px',
+          borderRadius: '1000px'
+        }}
+      >
+        {userName}
+      </Text>
+    </Box>;
+  }
+  return <></>
 }
