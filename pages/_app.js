@@ -28,7 +28,6 @@ function GlobalStyle() {
 }
 
 export default function MyApp({ Component, pageProps }) {
-    console.log("roda em todas as paginas");
     return (
         <>
             <GlobalStyle />

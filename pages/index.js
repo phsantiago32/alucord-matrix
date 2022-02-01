@@ -23,7 +23,7 @@ function Titulo(props) {
 export default function PaginaInicial() {
   const [userName, setUsername] = React.useState('');
   const router = useRouter();
-
+  const [name, setName] = React.useState('');
   return (
     <>
       <Box
@@ -67,9 +67,13 @@ export default function PaginaInicial() {
             </Text>
 
             <TextField
-              onChange={function (event) {
+              onChange={async function (event) {
                 const value = event.target.value
                 setUsername(value)
+                const response = await fetch(`https://api.github.com/users/${value}`)
+                const json = await response.json()
+                console.log(json)
+                setName(json.name)
               }}
               fullWidth
               textFieldColors={{
@@ -95,7 +99,10 @@ export default function PaginaInicial() {
           </Box>
           {/* Formulário */}
           {/* Photo Area */}
-          <UserAvatar userName={userName} />
+          <UserAvatar
+            userName={userName}
+            name={name}
+          />
           {/* Photo Area */}
         </Box>
       </Box>
@@ -105,6 +112,8 @@ export default function PaginaInicial() {
 
 function UserAvatar(props) {
   const userName = props.userName;
+  const name = props.name;
+  console.log({name})
   if (userName.length >= 2) {
     return <Box
       styleSheet={{
@@ -136,7 +145,7 @@ function UserAvatar(props) {
           borderRadius: '1000px'
         }}
       >
-        {userName}
+        {name}
       </Text>
     </Box>;
   }
