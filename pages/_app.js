@@ -1,4 +1,4 @@
-import { UserContext } from './user-context';
+import { UserContext } from '../context/user-context';
 import React from "react";
 
 function GlobalStyle() {
@@ -32,10 +32,12 @@ function GlobalStyle() {
 
 export default function MyApp({ Component, pageProps }) {
   const [userName, setUserName] = React.useState('phsantiago32');
+  const [name, setName] = React.useState('Pedro');
   const value = React.useMemo(
-    () => ({ userName, setUserName }),
-    [userName]
+    () => ({ userName, setUserName, name, setName }),
+    [userName, name]
   );
+  
 
   return (
     <>

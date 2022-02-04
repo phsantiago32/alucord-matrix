@@ -2,7 +2,7 @@ import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import React from 'react';
 import appConfig from "../config.json"
 import { useRouter } from 'next/router';
-import { UserContext } from './user-context';
+import { UserContext } from '../context/user-context';
 
 function Titulo(props) {
   const Tag = props.tag
@@ -74,12 +74,17 @@ export default function PaginaInicial() {
 
                 const value = event.target.value
 
-                userContext.setUserName(value)
-
-                setUsername(value)
                 const response = await fetch(`https://api.github.com/users/${value}`)
                 const json = await response.json()
                 console.log(json)
+                userContext.setUserName(
+                  value
+                )
+                userContext.setName(
+                  json.name
+                )
+
+                setUsername(value)
                 setName(json.name)
               }}
               fullWidth

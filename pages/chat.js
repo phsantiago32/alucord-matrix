@@ -2,7 +2,7 @@ import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React from 'react';
 import appConfig from '../config.json';
 import { createClient } from '@supabase/supabase-js';
-import { UserContext } from './user-context';
+import { UserContext } from '../context/user-context';
 
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0Mzk5NTk2NCwiZXhwIjoxOTU5NTcxOTY0fQ.Y9rFA6xyd4nNRWxxAgi6vmKqa6lHhk--94Enidga0WQ'
 const SUPABASE_URL = 'https://bivcnkxesbramxrcrfqi.supabase.co'
@@ -131,9 +131,12 @@ export default function ChatPage() {
     function handleNewMessage(message) {
 
         const messageObj = {
-            from: user.userName,
+            username: user.userName,
+            name: user.name,
             text: message,
         }
+
+        console.log(messageObj);
 
         supabase.from('messages').insert(messageObj).then(({ data }) => {
             setMessageList([data[0], ...messageList]);
@@ -169,7 +172,7 @@ function Header() {
 
 function MessageList(props) {
     let messages = props.messages;
-
+    const user = React.useContext(UserContext);
     return (
         <Box
             tag="ul"
@@ -217,10 +220,10 @@ function MessageList(props) {
                                         display: 'inline-block',
                                         marginRight: '8px',
                                     }}
-                                    src={`https://github.com/${message.from}.png`}
+                                    src={`https://github.com/${message.username}.png`}
                                 />
                                 <Text tag="strong">
-                                    {message.from}
+                                    {message.name} ({message.username})
                                 </Text>
                                 <Text
                                     styleSheet={{
