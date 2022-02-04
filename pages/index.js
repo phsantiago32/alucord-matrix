@@ -4,7 +4,6 @@ import appConfig from "../config.json"
 import { useRouter } from 'next/router';
 
 function Titulo(props) {
-  console.log(props)
   const Tag = props.tag
   return (
     <div>
@@ -113,7 +112,7 @@ export default function PaginaInicial() {
 function UserAvatar(props) {
   const userName = props.userName;
   const name = props.name;
-  console.log({name})
+
   if (userName.length >= 2) {
     return <Box
       styleSheet={{
