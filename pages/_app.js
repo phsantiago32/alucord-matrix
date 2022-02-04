@@ -1,6 +1,9 @@
+import { UserContext } from './user-context';
+import React from "react";
+
 function GlobalStyle() {
-    return (
-        <style global jsx>{`
+  return (
+    <style global jsx>{`
         * {
           margin: 0;
           padding: 0;
@@ -24,14 +27,22 @@ function GlobalStyle() {
         }
         /* ./App fit Height */ 
       `}</style>
-    );
+  );
 }
 
 export default function MyApp({ Component, pageProps }) {
-    return (
-        <>
-            <GlobalStyle />
-            <Component {...pageProps} />
-        </>
-    );
+  const [userName, setUserName] = React.useState('phsantiago32');
+  const value = React.useMemo(
+    () => ({ userName, setUserName }),
+    [userName]
+  );
+
+  return (
+    <>
+      <UserContext.Provider value={value}>
+        <GlobalStyle />
+        <Component {...pageProps} />
+      </UserContext.Provider>
+    </>
+  );
 }
